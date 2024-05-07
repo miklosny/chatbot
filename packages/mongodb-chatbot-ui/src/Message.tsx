@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { Body, Link } from "@leafygreen-ui/typography";
+import { Body, Link, Subtitle } from "@leafygreen-ui/typography";
 import { ParagraphSkeleton } from "@leafygreen-ui/skeleton-loader";
 import { Avatar, Variant as AvatarVariant } from "@lg-chat/avatar";
 import {
@@ -260,6 +260,35 @@ export const Message = ({
         verified={verified}
       >
         {isLoading ? <LoadingSkeleton /> : null}
+
+        {/* TODO: Rewrite this to use @lg-chat/rich-links */}
+        {messageData.references ? (
+          <>
+            <Subtitle
+              className={css`
+                padding: 0.5rem 0;
+              `}
+            >
+              Related Resources:
+            </Subtitle>
+            <ul>
+              {messageData.references.map((reference) => (
+                <li key={reference.url}>
+                  <p>{reference.linkVariant ?? "None"}</p>
+                  <Link
+                    href={`#${reference.url}`}
+                    className={css`
+                    font-weight: 600;
+                  `}
+                    baseFontSize={16}
+                  >
+                    {reference.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : null}
 
         {showRating ? (
           <MessageRatingWithFeedbackComment
